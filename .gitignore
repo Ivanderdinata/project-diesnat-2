@@ -1,0 +1,12 @@
+# Artefak runtime
+logs/*.log
+storage/ratelimit/*.json
+storage/cache/
+storage/uploads/
+
+# Berkas lokal / debug
+_cl.php
+.env
+.DS_Store
+Thumbs.db
+*.bak
