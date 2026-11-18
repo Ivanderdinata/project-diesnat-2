@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 require_once __DIR__ . '/includes/functions.php';
@@ -70,14 +71,14 @@ require APP_ROOT . '/includes/header.php';
             <div class="field">
                 <label for="player-name">Nama</label>
                 <input class="input" type="text" id="player-name" name="name" maxlength="50"
-                       placeholder="Contoh: Rani" required autocomplete="off" enterkeyhint="next">
+                    placeholder="Contoh: Rani" required autocomplete="off" enterkeyhint="next">
                 <span class="field-error" id="err-name"></span>
             </div>
 
             <div class="field">
                 <label for="player-kelas">Kelas</label>
                 <input class="input" type="text" id="player-kelas" name="kelas" maxlength="30"
-                       placeholder="Contoh: XI RPL 1" required autocomplete="off" enterkeyhint="go">
+                    placeholder="Contoh: XI RPL 1" required autocomplete="off" enterkeyhint="go">
                 <span class="field-error" id="err-kelas"></span>
             </div>
 
@@ -87,7 +88,10 @@ require APP_ROOT . '/includes/header.php';
             </button>
 
             <p class="form-note">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16.5v.01"/></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 8v5M12 16.5v.01" />
+                </svg>
                 <span>Nama dan kelas akan tampil di leaderboard. Gunakan nama asli agar mudah dikenali.</span>
             </p>
         </form>
@@ -144,22 +148,22 @@ require APP_ROOT . '/includes/header.php';
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($leaderboard as $i => $row): ?>
-                    <?php $rank = $i + 1; ?>
-                    <tr class="rank-<?= $rank <= 3 ? $rank : 'n' ?>">
-                        <td><span class="rank-badge"><?= $rank ?></span></td>
-                        <td>
-                            <div class="player-cell">
-                                <span class="player-name"><?= e($row['name']) ?></span>
-                                <span class="player-kelas"><?= e($row['kelas']) ?></span>
-                            </div>
-                        </td>
-                        <td class="num col-time" style="color:var(--text-dim);font-size:.72rem">
-                            <?= number_format(((int) $row['total_time_ms']) / 1000, 1, ',', '.') ?>s
-                        </td>
-                        <td class="col-score"><?= number_format((int) $row['total_score'], 0, ',', '.') ?></td>
-                    </tr>
-                <?php endforeach; ?>
+                    <?php foreach ($leaderboard as $i => $row): ?>
+                        <?php $rank = $i + 1; ?>
+                        <tr class="rank-<?= $rank <= 3 ? $rank : 'n' ?>">
+                            <td><span class="rank-badge"><?= $rank ?></span></td>
+                            <td>
+                                <div class="player-cell">
+                                    <span class="player-name"><?= e($row['name']) ?></span>
+                                    <span class="player-kelas"><?= e($row['kelas']) ?></span>
+                                </div>
+                            </td>
+                            <td class="num col-time" style="color:var(--text-dim);font-size:.72rem">
+                                <?= number_format(((int) $row['total_time_ms']) / 1000, 1, ',', '.') ?>s
+                            </td>
+                            <td class="col-score"><?= number_format((int) $row['total_score'], 0, ',', '.') ?></td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
