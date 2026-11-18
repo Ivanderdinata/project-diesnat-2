@@ -84,6 +84,11 @@ require APP_ROOT . '/includes/header.php';
 ?>
 
 <div class="result-shell">
+    <div class="px-result-scene" aria-hidden="true">
+        <div class="px-result-rocket"><?= pixel_gif_rocket() ?></div>
+        <div class="px-result-astro"><?= pixel_gif_astro() ?></div>
+    </div>
+
     <div class="result-card">
         <span class="result-emoji" aria-hidden="true"><?= $emoji ?></span>
         <h1 class="result-title"><?= e($headline) ?></h1>
@@ -120,11 +125,14 @@ require APP_ROOT . '/includes/header.php';
         </p>
 
         <div class="result-actions">
-            <a class="btn btn-gold" href="<?= e(APP_URL) ?>/index.php#main">
+            <a class="btn btn-gold" href="<?= e(APP_URL) ?>/index.php?skip=1#main">
                 <span aria-hidden="true">🔁</span> Main Lagi
             </a>
-            <a class="btn btn-ghost" href="<?= e(APP_URL) ?>/index.php#leaderboard">
+            <a class="btn btn-ghost" href="<?= e(APP_URL) ?>/leaderboard.php">
                 <span aria-hidden="true">🏆</span> Lihat Leaderboard
+            </a>
+            <a class="btn btn-ghost" href="<?= e(APP_URL) ?>/cafeteria.php">
+                <span aria-hidden="true">🗺️</span> Kembali ke Cafeteria
             </a>
         </div>
     </div>

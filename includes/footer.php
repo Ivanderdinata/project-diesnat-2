@@ -13,6 +13,9 @@ $pageScripts = $pageScripts ?? [];
         </div>
         <p>&copy; <?= date('Y') ?> &mdash; Dibuat dengan PHP native</p>
         <p class="footer-links">
+            <a href="<?= e(APP_URL) ?>/cafeteria.php">Cafeteria</a>
+            <a href="<?= e(APP_URL) ?>/index.php?skip=1">Beranda</a>
+            <a href="<?= e(APP_URL) ?>/leaderboard.php">Leaderboard</a>
             <a href="<?= e(APP_URL) ?>/admin/login.php">Admin</a>
         </p>
     </div>
@@ -23,6 +26,7 @@ $pageScripts = $pageScripts ?? [];
     window.APP_CSRF = <?= json_encode(csrf_token()) ?>;
 </script>
 <script src="<?= e(APP_URL) ?>/assets/js/app.js"></script>
+<script src="<?= e(APP_URL) ?>/assets/js/fx.js" defer></script>
 <?php foreach ($pageScripts as $script): ?>
 <script src="<?= e(APP_URL) ?>/assets/js/<?= e($script) ?>" defer></script>
 <?php endforeach; ?>

@@ -1,0 +1,530 @@
+/* ============================================================
+   ASTRO-DINER 77 — Cafeteria eksplorasi pixel
+   Port dari cafetaria-design.php, disesuaikan dengan
+   token warna & rute project.
+   ============================================================ */
+
+:root {
+    --cafe-bg: #070812;
+    --cafe-panel: rgba(13, 17, 38, 0.92);
+    --cafe-border: #38bdf8;
+    --cafe-pink: #f43f5e;
+    --cafe-amber: #fbbf24;
+    --cafe-green: #34d399;
+    --cafe-text: #f1f5f9;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--cafe-bg);
+    color: var(--cafe-text);
+    font-family: 'VT323', monospace;
+    overflow: hidden;
+}
+
+body {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    display: block;
+}
+
+/* Matikan scanline global; versi cafe punya sendiri */
+body::after {
+    display: none !important;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity .35s ease;
+}
+
+#game-container.cafe-fading {
+    opacity: 0;
+}
+
+canvas#worldCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* Scanline halus */
+.crt-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, .14) 50%);
+    background-size: 100% 4px;
+    z-index: 5;
+}
+
+/* ---------- HUD ---------- */
+#hud-top {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.pixel-box {
+    background: var(--cafe-panel);
+    border: 3px solid var(--cafe-border);
+    box-shadow: 0 0 0 3px #050714, 0 6px 20px rgba(0, 0, 0, .7);
+    border-radius: 6px;
+    padding: 10px 14px;
+    pointer-events: auto;
+}
+
+.title-badge {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.game-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    color: var(--cafe-amber);
+    text-shadow: 2px 2px 0 #78350f;
+    letter-spacing: .5px;
+}
+
+.zone-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    color: #7dd3fc;
+}
+
+.zone-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: var(--cafe-green);
+    box-shadow: 0 0 8px var(--cafe-green);
+    animation: zonePulse 1.8s ease-in-out infinite;
+}
+
+@keyframes zonePulse {
+    50% { opacity: .35; }
+}
+
+.hud-controls-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.hud-credits {
+    padding: 8px 12px;
+    font-size: 20px;
+    color: #fde047;
+}
+
+.pixel-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    background: #1e293b;
+    color: #f8fafc;
+    border: 3px solid #64748b;
+    border-radius: 6px;
+    padding: 10px 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #0f172a;
+    transition: transform .08s, background .15s, border-color .15s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.pixel-btn:hover {
+    background: #334155;
+    border-color: var(--cafe-border);
+    color: #f8fafc;
+    text-decoration: none;
+}
+
+.pixel-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #0f172a;
+}
+
+.hud-skip {
+    border-color: var(--cafe-green);
+    color: var(--cafe-green);
+}
+
+/* ---------- Minimap ---------- */
+#minimap-wrapper {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 10;
+    padding: 6px;
+    background: var(--cafe-panel);
+    border: 3px solid #475569;
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, .75);
+}
+
+#minimapCanvas {
+    display: block;
+    image-rendering: pixelated;
+    border: 1px solid #1e293b;
+}
+
+.minimap-caption {
+    margin-top: 3px;
+    font-size: 14px;
+    text-align: center;
+    letter-spacing: 1px;
+    color: #94a3b8;
+}
+
+/* ---------- Petunjuk ---------- */
+#controls-hint {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    z-index: 10;
+    font-size: 18px;
+    line-height: 1.3;
+    color: #cbd5e1;
+}
+
+#controls-hint .hint-line {
+    margin-top: 4px;
+}
+
+.key-cap {
+    display: inline-block;
+    padding: 0 6px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: var(--cafe-amber);
+    background: #1e293b;
+    border: 2px solid #64748b;
+    border-bottom-width: 4px;
+    border-radius: 4px;
+    margin: 0 2px;
+}
+
+/* ---------- Prompt interaksi ---------- */
+#interact-prompt {
+    position: fixed;
+    bottom: 92px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 15;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    background: rgba(15, 23, 42, .95);
+    border: 3px solid var(--cafe-amber);
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(251, 191, 36, .35);
+    cursor: pointer;
+    animation: floatPrompt 1.2s ease-in-out infinite;
+}
+
+@keyframes floatPrompt {
+    0%, 100% { transform: translate(-50%, 0); }
+    50%      { transform: translate(-50%, -5px); }
+}
+
+#interact-prompt-text {
+    font-size: 22px;
+    color: #fef3c7;
+    white-space: nowrap;
+}
+
+/* ---------- Dialog ---------- */
+#dialogue-box {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(680px, 92vw);
+    z-index: 30;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 20px;
+    background: rgba(10, 14, 32, .97);
+    border: 4px solid var(--cafe-border);
+    border-radius: 8px;
+    box-shadow: 0 0 0 4px #050714, 0 12px 35px rgba(0, 0, 0, .85);
+}
+
+.dialogue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #1e293b;
+}
+
+#dialogue-speaker {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    color: var(--cafe-amber);
+}
+
+.dialogue-hint {
+    font-size: 18px;
+    color: #94a3b8;
+}
+
+#dialogue-body {
+    min-height: 64px;
+    font-size: 24px;
+    line-height: 1.35;
+    color: #f8fafc;
+}
+
+.dialogue-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+#dialogue-choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.choice-btn {
+    font-family: 'VT323', monospace;
+    font-size: 21px;
+    padding: 4px 12px;
+    background: #1e293b;
+    color: #7dd3fc;
+    border: 2px solid var(--cafe-border);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.choice-btn:hover {
+    background: #0284c7;
+    color: #ffffff;
+}
+
+/* ---------- Modal arcade ---------- */
+#arcade-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(3, 5, 14, .86);
+}
+
+.arcade-cabinet-frame {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: min(460px, 95vw);
+    padding: 16px;
+    background: #18182b;
+    border: 6px solid var(--cafe-pink);
+    border-radius: 14px;
+    box-shadow: 0 0 35px rgba(244, 63, 94, .45), inset 0 0 20px rgba(0, 0, 0, .8);
+}
+
+.arcade-marquee {
+    width: 100%;
+    padding: 10px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 13px;
+    text-align: center;
+    color: #fde047;
+    background: #2e1065;
+    border: 3px solid #a855f7;
+    border-radius: 6px;
+    text-shadow: 0 0 8px #f59e0b;
+}
+
+#arcadeCanvas {
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    background: #050510;
+    border: 4px solid #334155;
+    border-radius: 6px;
+    image-rendering: pixelated;
+}
+
+.arcade-help {
+    font-size: 20px;
+    text-align: center;
+    color: #cbd5e1;
+}
+
+.arcade-controls-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.arcade-controls-group {
+    display: flex;
+    gap: 6px;
+}
+
+.arc-fire {
+    border-color: var(--cafe-pink);
+    color: #fda4af;
+}
+
+.arc-exit {
+    border-color: var(--cafe-amber);
+    color: var(--cafe-amber);
+}
+
+/* ---------- Kontrol sentuh ---------- */
+#touch-controls {
+    position: fixed;
+    bottom: 18px;
+    left: 18px;
+    z-index: 20;
+    display: none;
+    gap: 16px;
+    align-items: flex-end;
+}
+
+.dpad {
+    display: grid;
+    grid-template-columns: repeat(3, 46px);
+    grid-template-rows: repeat(3, 46px);
+    gap: 4px;
+}
+
+.dpad-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    color: #f8fafc;
+    background: rgba(30, 41, 59, .85);
+    border: 2px solid #64748b;
+    border-radius: 8px;
+    touch-action: manipulation;
+}
+
+.dpad-btn:active {
+    color: #0f172a;
+    background: var(--cafe-border);
+}
+
+.touch-action {
+    padding: 16px 18px;
+    border-color: var(--cafe-amber);
+    color: var(--cafe-amber);
+}
+
+.cafe-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* ---------- Responsif ---------- */
+@media (max-width: 768px) {
+    #controls-hint {
+        display: none;
+    }
+
+    #touch-controls {
+        display: flex;
+    }
+
+    #minimap-wrapper {
+        top: 76px;
+        bottom: auto;
+        right: 14px;
+    }
+
+    .game-title {
+        font-size: 10px;
+    }
+
+    #interact-prompt {
+        bottom: 120px;
+    }
+
+    .hud-credits {
+        font-size: 16px;
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    #hud-top {
+        gap: 6px;
+    }
+
+    .zone-label {
+        font-size: 16px;
+    }
+
+    .hud-skip {
+        display: none;
+    }
+
+    #dialogue-body {
+        font-size: 20px;
+    }
+}
+
+/* ---------- Gerak minimal ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .zone-dot,
+    #interact-prompt {
+        animation: none;
+    }
+
+    #game-container {
+        transition: none;
+    }
+}

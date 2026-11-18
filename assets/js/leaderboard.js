@@ -94,6 +94,14 @@
             lastPayload = signature;
 
             render(data.players);
+
+            // Kartu podium baru perlu dipasangi efek tilt lagi.
+            if (window.fxBindTilt) window.fxBindTilt();
+
+            // Kilau singkat agar terlihat papan baru saja diperbarui.
+            board.classList.remove('fx-fresh');
+            void board.offsetWidth;
+            board.classList.add('fx-fresh');
         } catch (error) {
             /* Diamkan; coba lagi pada putaran berikutnya. */
         }

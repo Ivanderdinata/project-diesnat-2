@@ -53,6 +53,8 @@ dan **JavaScript vanilla**.
 ```
 project_quiz_diesnat/
 ├── index.php              halaman utama: leaderboard + form nama
+├── cafeteria.php          lobby eksplorasi (karakter WASD, arcade, NPC)
+├── leaderboard.php        halaman papan peringkat lengkap
 ├── play.php               halaman kuis
 ├── result.php             halaman hasil akhir
 ├── database.sql           struktur tabel + data contoh
@@ -72,13 +74,24 @@ project_quiz_diesnat/
 │   └── includes/          layout admin
 ├── includes/
 │   ├── header.php, footer.php
+│   ├── pixel-decor.php    sprite pixel-art & lapisan dekorasi
 │   ├── auth.php           proteksi halaman admin
 │   ├── csrf.php           token CSRF
 │   ├── functions.php      helper + bootstrap
 │   └── game.php           logika permainan & skor
 ├── assets/
-│   ├── css/style.css
-│   └── js/  app.js, home.js, game.js, leaderboard.js, result.js
+│   ├── css/
+│   │   ├── style.css          gaya utama (arcade pixel)
+│   │   ├── pixel-decor.css    dekorasi pixel & animasi sprite
+│   │   ├── fx.css             animasi interaktif (ripple, reveal, ticker, dll.)
+│   │   ├── cafeteria.css      scene Cafeteria (canvas + HUD)
+│   │   └── leaderboard.css    halaman Hall of Fame
+│   └── js/
+│       ├── app.js             helper bersama (toast, confetti, fetch)
+│       ├── fx.js              efek interaktif global
+│       ├── cafeteria.js       engine eksplorasi Cafeteria
+│       ├── leaderboard-page.js animasi halaman leaderboard
+│       ├── home.js, game.js, leaderboard.js, result.js
 ├── logs/                  log error PHP (diblokir dari web)
 └── storage/               rate limit file (diblokir dari web)
 ```

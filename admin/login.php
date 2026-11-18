@@ -110,7 +110,7 @@ $csrf = csrf_token();
             </div>
         </div>
         <p style="text-align:center;margin-top:18px">
-            <a href="<?= e(APP_URL) ?>/index.php" style="color:var(--text-dim);font-size:.86rem">← Kembali ke beranda</a>
+            <a href="<?= e(APP_URL) ?>/cafeteria.php" style="color:var(--text-dim);font-size:.86rem">← Kembali ke Cafeteria</a>
         </p>
     </div>
 </main>

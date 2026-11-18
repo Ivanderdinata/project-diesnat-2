@@ -6,6 +6,14 @@ require_once __DIR__ . '/includes/functions.php';
 require_once APP_ROOT . '/includes/csrf.php';
 require_once APP_ROOT . '/includes/game.php';
 
+// Beranda selalu dibuka lewat Cafeteria (bukan sekali per sesi),
+// karena satu laptop dipakai bergantian oleh banyak pemain.
+// ?skip=1 dipakai tautan internal agar tidak terjadi redirect berulang:
+// nav, tombol "Main Lagi", dan tautan dari Cafeteria sendiri.
+if (!isset($_GET['skip'])) {
+    redirect(APP_URL . '/cafeteria.php');
+}
+
 $quizTitle    = setting($pdo, 'quiz_title', 'Quiz Dies Nat');
 $quizSubtitle = setting($pdo, 'quiz_subtitle', 'Jawab cepat, jawab tepat, jadilah juara!');
 
@@ -54,9 +62,15 @@ require APP_ROOT . '/includes/header.php';
             <li>Skor benar berkisar 500 sampai 1000 poin, tergantung kecepatan.</li>
             <li>Jawaban salah atau kehabisan waktu mendapat 0 poin.</li>
         </ul>
+
+        <div class="px-hero-scene" aria-hidden="true">
+            <div class="px-hero-astro"><?= pixel_gif_astro() ?></div>
+            <div class="px-hero-rocket"><?= pixel_gif_rocket() ?></div>
+        </div>
     </div>
 
     <div class="card start-card" id="main">
+        <div class="start-rocket" aria-hidden="true"><?= pixel_gif_rocket() ?></div>
         <h2>Siap main?</h2>
         <p class="card-hint">Isi nama dan kelasmu, lalu tekan Mulai.</p>
 
@@ -98,12 +112,38 @@ require APP_ROOT . '/includes/header.php';
     </div>
 </section>
 
+<div class="fx-ticker" aria-hidden="true">
+    <div class="fx-ticker-track">
+        <div class="fx-ticker-group">
+            <span>★ <b>Insert Coin</b></span>
+            <span>Press Start</span>
+            <span>⚡ Jawab Cepat</span>
+            <span>🎯 Raih Skor</span>
+            <span>🏆 Top 10</span>
+            <span>🚀 Dies Natalis</span>
+        </div>
+        <div class="fx-ticker-group">
+            <span>★ <b>Insert Coin</b></span>
+            <span>Press Start</span>
+            <span>⚡ Jawab Cepat</span>
+            <span>🎯 Raih Skor</span>
+            <span>🏆 Top 10</span>
+            <span>🚀 Dies Natalis</span>
+        </div>
+    </div>
+</div>
+
 <div class="section-head" id="leaderboard">
     <div>
         <h2>🏆 Hall of Fame — Top 10</h2>
         <p>Satu pemain tampil sekali dengan skor terbaiknya.</p>
     </div>
-    <span class="live-dot" id="live-indicator">Live</span>
+    <div class="section-head-actions">
+        <a class="btn btn-sm" href="<?= e(APP_URL) ?>/leaderboard.php">
+            <span aria-hidden="true">📊</span> Papan Lengkap
+        </a>
+        <span class="live-dot" id="live-indicator">Live</span>
+    </div>
 </div>
 
 <div class="podium" id="podium" aria-label="Tiga peringkat teratas">

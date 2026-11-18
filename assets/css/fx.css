@@ -1,0 +1,514 @@
+/* ============================================================
+   FX — animasi interaktif tambahan
+   Dimuat setelah style.css & pixel-decor.css.
+   Semua animasi di sini dekoratif dan tidak mengubah layout.
+   ============================================================ */
+
+/* ---------- Atribut hidden harus selalu menang ----------
+   Banyak komponen di sini memakai display: inline-flex/grid, yang
+   akan mengalahkan [hidden] bawaan browser. Tanpa aturan ini
+   elemen seperti chip streak bisa tampil padahal masih hidden. */
+[hidden] {
+    display: none !important;
+}
+
+/* ---------- Reveal saat masuk viewport ---------- */
+.fx-reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .55s var(--ease), transform .55s var(--ease);
+}
+
+.fx-reveal.is-in {
+    opacity: 1;
+    transform: none;
+}
+
+/* ---------- Hero masuk ---------- */
+@keyframes fxHeroIn {
+    from { opacity: 0; transform: translateY(24px) scale(.985); }
+    to   { opacity: 1; transform: none; }
+}
+
+.hero-copy { animation: fxHeroIn .7s var(--ease) both; }
+.start-card { animation: fxHeroIn .7s var(--ease) .1s both; }
+
+/* ---------- Baris leaderboard ---------- */
+@keyframes fxRowIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.board-table tbody tr {
+    animation: fxRowIn .4s var(--ease) backwards;
+}
+
+.board-table tbody tr:nth-child(1) { animation-delay: .02s; }
+.board-table tbody tr:nth-child(2) { animation-delay: .05s; }
+.board-table tbody tr:nth-child(3) { animation-delay: .08s; }
+.board-table tbody tr:nth-child(4) { animation-delay: .11s; }
+.board-table tbody tr:nth-child(5) { animation-delay: .14s; }
+.board-table tbody tr:nth-child(6) { animation-delay: .17s; }
+.board-table tbody tr:nth-child(7) { animation-delay: .2s; }
+.board-table tbody tr:nth-child(8) { animation-delay: .23s; }
+.board-table tbody tr:nth-child(9) { animation-delay: .26s; }
+.board-table tbody tr:nth-child(10) { animation-delay: .29s; }
+
+/* ---------- Podium ---------- */
+@keyframes fxPodiumIn {
+    from { opacity: 0; transform: translateY(18px) scale(.96); }
+    to   { opacity: 1; transform: none; }
+}
+
+.podium-card {
+    animation: fxPodiumIn .5s var(--ease) backwards;
+    transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+
+.podium-card:hover {
+    transform: translateY(-4px);
+}
+
+.podium-1 { animation-delay: .14s; }
+.podium-2 { animation-delay: .04s; }
+.podium-3 { animation-delay: .24s; }
+
+.podium-1 .podium-tag {
+    animation: fxTagShine 2.6s ease-in-out infinite;
+}
+
+@keyframes fxTagShine {
+    0%, 100% { box-shadow: var(--shadow-sm); }
+    50%      { box-shadow: 0 0 16px rgba(255, 203, 69, .75), var(--shadow-sm); }
+}
+
+/* ---------- Progress bar berkilau ---------- */
+.progress-fill {
+    background-image: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, .5) 50%, transparent 80%);
+    background-size: 220% 100%;
+    animation: fxShimmer 2.4s linear infinite;
+}
+
+@keyframes fxShimmer {
+    from { background-position: 200% 0; }
+    to   { background-position: -200% 0; }
+}
+
+/* ---------- Ripple klik ---------- */
+.btn,
+.nav-link,
+.icon-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.fx-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: .25;
+    transform: scale(0);
+    animation: fxRipple .55s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes fxRipple {
+    to { transform: scale(1); opacity: 0; }
+}
+
+/* ---------- Partikel piksel ---------- */
+.fx-pixel {
+    position: fixed;
+    z-index: 85;
+    width: 6px;
+    height: 6px;
+    pointer-events: none;
+    animation: fxPixelFly .75s steps(7, end) forwards;
+}
+
+@keyframes fxPixelFly {
+    0%   { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
+    100% { transform: translate3d(var(--fx-dx, 0), var(--fx-dy, 0), 0) scale(.35); opacity: 0; }
+}
+
+/* ---------- Kilat layar ---------- */
+.fx-flash {
+    position: fixed;
+    inset: 0;
+    z-index: 75;
+    pointer-events: none;
+    animation: fxFlash .5s ease-out forwards;
+}
+
+@keyframes fxFlash {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+/* ---------- Jejak kursor ---------- */
+.fx-trail {
+    position: fixed;
+    z-index: 84;
+    width: 4px;
+    height: 4px;
+    pointer-events: none;
+    animation: fxTrail .7s steps(4, end) forwards;
+}
+
+@keyframes fxTrail {
+    to { transform: translateY(12px) scale(0); opacity: 0; }
+}
+
+/* ---------- Jawaban masuk berurutan ---------- */
+.answer.fx-answer-in {
+    animation: fxAnswerIn .38s var(--ease) backwards;
+}
+
+@keyframes fxAnswerIn {
+    from { opacity: 0; transform: translateY(10px) scale(.98); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* ---------- Streak ---------- */
+.meta-chip.streak {
+    color: var(--gold);
+    border-color: var(--gold-deep);
+    background: rgba(255, 203, 69, .1);
+}
+
+.meta-chip.streak b { color: var(--gold); }
+
+.meta-chip.streak.is-hot {
+    animation: fxStreakPop .45s var(--ease);
+}
+
+@keyframes fxStreakPop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.16); box-shadow: 0 0 18px rgba(255, 203, 69, .6); }
+    100% { transform: scale(1); }
+}
+
+.streak-note {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: .76rem;
+    margin: 4px 0 0;
+    animation: fxStreakPop .45s var(--ease);
+}
+
+/* ---------- Halaman hasil ---------- */
+@keyframes fxCellIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.result-grid .result-cell {
+    animation: fxCellIn .45s var(--ease) backwards;
+}
+
+.result-grid .result-cell:nth-child(1) { animation-delay: .18s; }
+.result-grid .result-cell:nth-child(2) { animation-delay: .26s; }
+.result-grid .result-cell:nth-child(3) { animation-delay: .34s; }
+
+@keyframes fxChipIn {
+    from { opacity: 0; transform: scale(.8) rotate(-4deg); }
+    to   { opacity: 1; transform: none; }
+}
+
+.rank-chip {
+    animation: fxChipIn .5s var(--ease) .1s backwards;
+}
+
+.result-emoji {
+    animation: fxEmojiBounce 2.8s ease-in-out infinite;
+}
+
+@keyframes fxEmojiBounce {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50%      { transform: translateY(-8px) rotate(3deg); }
+}
+
+.big-score {
+    animation: fxScoreGlow 2.6s ease-in-out infinite;
+}
+
+@keyframes fxScoreGlow {
+    0%, 100% { text-shadow: 0 0 26px rgba(0, 250, 100, .55), 4px 4px 0 var(--ink); }
+    50%      { text-shadow: 0 0 42px rgba(0, 250, 100, .9), 4px 4px 0 var(--ink); }
+}
+
+/* ---------- Brand ---------- */
+.brand:hover .brand-mark {
+    animation: fxStarSpin .8s var(--ease);
+}
+
+@keyframes fxStarSpin {
+    to { transform: rotate(360deg) scale(1.06); }
+}
+
+/* ---------- Hover kecil ---------- */
+.stat-chip {
+    transition: transform .18s var(--ease), box-shadow .18s var(--ease);
+}
+
+.stat-chip:hover {
+    transform: translateY(-2px);
+}
+
+a.nav-link::after {
+    content: "";
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 3px;
+    height: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .25s var(--ease);
+}
+
+a.nav-link:hover::after {
+    transform: scaleX(1);
+}
+
+/* ---------- Kilau saat leaderboard diperbarui ---------- */
+.board.fx-fresh {
+    animation: fxBoardGlow .8s var(--ease);
+}
+
+@keyframes fxBoardGlow {
+    0%   { box-shadow: 0 0 0 3px rgba(0, 240, 255, .55), var(--shadow); }
+    100% { box-shadow: var(--shadow); }
+}
+
+/* ---------- Scroll progress ---------- */
+.fx-scrollbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 60;
+    pointer-events: none;
+    background: transparent;
+}
+
+.fx-scrollbar span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--cyan), var(--pink), var(--green));
+    box-shadow: 0 0 10px rgba(0, 240, 255, .7);
+    transition: width .08s linear;
+}
+
+/* ---------- Marquee ticker ---------- */
+.fx-ticker {
+    overflow: hidden;
+    margin: 30px 0 0;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    background: var(--bg-deep);
+    box-shadow: var(--shadow-sm);
+    user-select: none;
+}
+
+.fx-ticker-track {
+    display: flex;
+    width: max-content;
+    animation: fxTicker 26s linear infinite;
+    will-change: transform;
+}
+
+.fx-ticker-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 28px;
+    padding: 8px 14px;
+}
+
+.fx-ticker span {
+    font-family: var(--font-display);
+    font-size: .64rem;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    white-space: nowrap;
+}
+
+.fx-ticker span b { color: var(--cyan); }
+.fx-ticker span:nth-child(3) { color: var(--pink-soft); }
+.fx-ticker span:nth-child(5) { color: var(--gold); }
+
+@keyframes fxTicker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+/* ---------- Glow judul hero ---------- */
+.hero-title {
+    animation: fxTitleGlow 4.5s ease-in-out infinite;
+}
+
+.hero-title .hl {
+    animation: fxHlGlow 3.4s ease-in-out infinite;
+}
+
+@keyframes fxTitleGlow {
+    0%, 100% { text-shadow: 0 0 14px rgba(0, 240, 255, .55); }
+    50%      { text-shadow: 0 0 24px rgba(0, 240, 255, .8), 0 0 44px rgba(255, 74, 141, .22); }
+}
+
+@keyframes fxHlGlow {
+    0%, 100% { text-shadow: 0 0 14px rgba(0, 250, 100, .55); }
+    50%      { text-shadow: 0 0 26px rgba(0, 250, 100, .9); }
+}
+
+/* ---------- Kilau tombol ---------- */
+.btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, .4) 50%, transparent 65%);
+    transform: translateX(-130%);
+    transition: transform .55s var(--ease);
+    pointer-events: none;
+}
+
+.btn:hover::after {
+    transform: translateX(130%);
+}
+
+/* ---------- Kartu "Siap main?" ---------- */
+.start-card {
+    transition: box-shadow .25s var(--ease);
+}
+
+.start-card:hover {
+    box-shadow: 6px 6px 0 var(--pink), 0 0 28px rgba(0, 240, 255, .16);
+}
+
+/* ---------- Masuk halaman ---------- */
+@keyframes fxPageIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.site-main { animation: fxPageIn .45s ease both; }
+
+/* ---------- Pill hero berdenyut ---------- */
+@keyframes fxPillPulse {
+    0%, 100% { box-shadow: var(--shadow-sm); }
+    50%      { box-shadow: 0 0 16px rgba(255, 74, 141, .65), var(--shadow-sm); }
+}
+
+.pill { animation: fxPillPulse 2.8s ease-in-out infinite; }
+
+/* ---------- Kartu soal bercahaya halus ---------- */
+.q-card {
+    animation: qIn .3s var(--ease) both, fxCardGlow 4s ease-in-out infinite;
+}
+
+@keyframes fxCardGlow {
+    0%, 100% { box-shadow: var(--shadow-lg); }
+    50%      { box-shadow: var(--shadow-lg), 0 0 26px rgba(0, 240, 255, .18); }
+}
+
+/* ---------- Tombol utama menarik perhatian ---------- */
+@keyframes fxStartPulse {
+    0%, 100% { box-shadow: var(--shadow); }
+    50%      { box-shadow: 4px 4px 0 var(--ink), 0 0 22px rgba(0, 250, 100, .55); }
+}
+
+.start-card #start-btn {
+    animation: fxStartPulse 2.6s ease-in-out infinite;
+}
+
+.start-card #start-btn:hover {
+    animation: none;
+}
+
+/* ---------- Ringkasan jawaban di halaman hasil ---------- */
+.result-shell .data-table tbody tr {
+    animation: fxRowIn .35s var(--ease) backwards;
+}
+
+.result-shell .data-table tbody tr:nth-child(1) { animation-delay: .12s; }
+.result-shell .data-table tbody tr:nth-child(2) { animation-delay: .16s; }
+.result-shell .data-table tbody tr:nth-child(3) { animation-delay: .2s; }
+.result-shell .data-table tbody tr:nth-child(4) { animation-delay: .24s; }
+.result-shell .data-table tbody tr:nth-child(5) { animation-delay: .28s; }
+.result-shell .data-table tbody tr:nth-child(6) { animation-delay: .32s; }
+.result-shell .data-table tbody tr:nth-child(7) { animation-delay: .36s; }
+.result-shell .data-table tbody tr:nth-child(8) { animation-delay: .4s; }
+.result-shell .data-table tbody tr:nth-child(9) { animation-delay: .44s; }
+.result-shell .data-table tbody tr:nth-child(10) { animation-delay: .48s; }
+
+.result-shell .data-table tbody tr:hover {
+    background: var(--surface-2);
+}
+
+/* ---------- Panel ringkasan muncul lembut ---------- */
+.result-shell .panel {
+    animation: fxCellIn .5s var(--ease) .35s both;
+}
+
+/* ---------- Kunci jawaban melompat saat hover ---------- */
+.answer:hover:not(:disabled) .answer-key {
+    animation: fxKeyPop .35s var(--ease);
+}
+
+@keyframes fxKeyPop {
+    50% { transform: scale(1.18) rotate(-4deg); }
+}
+
+/* ---------- Timer berkedip saat kritis ---------- */
+.timer-bar.is-danger {
+    animation: fxDangerBlink .6s steps(2, end) infinite;
+}
+
+@keyframes fxDangerBlink {
+    50% { opacity: .55; }
+}
+
+/* ---------- Hormati gerak minimal ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .fx-reveal {
+        opacity: 1;
+        transform: none;
+    }
+
+    .hero-copy,
+    .start-card,
+    .board-table tbody tr,
+    .podium-card,
+    .progress-fill,
+    .result-emoji,
+    .big-score,
+    .result-grid .result-cell,
+    .rank-chip,
+    .result-shell .data-table tbody tr,
+    .result-shell .panel,
+    .start-card #start-btn,
+    .podium-1 .podium-tag,
+    .answer.fx-answer-in,
+    .fx-ticker-track,
+    .hero-title,
+    .hero-title .hl,
+    .site-main,
+    .pill,
+    .q-card,
+    .timer-bar.is-danger,
+    .answer:hover:not(:disabled) .answer-key {
+        animation: none;
+    }
+
+    .fx-ripple,
+    .fx-pixel,
+    .fx-trail,
+    .fx-flash {
+        display: none;
+    }
+}

@@ -13,7 +13,7 @@ declare(strict_types=1);
         </div>
         <p>&copy; <?= date('Y') ?> Admin Panel</p>
         <p class="footer-links">
-            <a href="<?= e(APP_URL) ?>/index.php">Lihat Situs</a>
+            <a href="<?= e(APP_URL) ?>/index.php?skip=1">Lihat Situs</a>
         </p>
     </div>
 </footer>

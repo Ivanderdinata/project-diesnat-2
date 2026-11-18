@@ -18,6 +18,7 @@
         deadline: 0,
         muted: readMuted(),
         audio: null,
+        streak: 0,
     };
 
     const els = {
@@ -40,6 +41,8 @@
         muteBtn: document.getElementById('mute-btn'),
         muteIcon: document.getElementById('mute-icon'),
         qCard: document.getElementById('q-card'),
+        streakChip: document.getElementById('streak-chip'),
+        streakValue: document.getElementById('streak-value'),
     };
 
     const CIRCUMFERENCE = 2 * Math.PI * 25;
@@ -197,6 +200,12 @@
             els.answers.appendChild(button);
         });
 
+        // Tiap pilihan muncul berurutan agar terasa "di-deal" seperti kartu.
+        Array.from(els.answers.children).forEach((el, i) => {
+            el.classList.add('fx-answer-in');
+            el.style.animationDelay = (i * 55) + 'ms';
+        });
+
         els.qCard.style.animation = 'none';
         void els.qCard.offsetWidth;
         els.qCard.style.animation = '';
@@ -229,6 +238,21 @@
         pop.style.top = rect.top + 'px';
         document.body.appendChild(pop);
         setTimeout(() => pop.remove(), 1100);
+    }
+
+    /** Tampilkan chip streak (mulai dari 2 jawaban benar berturut-turut). */
+    function updateStreak() {
+        if (!els.streakChip) return;
+
+        if (state.streak >= 2) {
+            els.streakChip.hidden = false;
+            els.streakValue.textContent = String(state.streak);
+            els.streakChip.classList.remove('is-hot');
+            void els.streakChip.offsetWidth;
+            els.streakChip.classList.add('is-hot');
+        } else {
+            els.streakChip.hidden = true;
+        }
     }
 
     /* ---------------- Alur jawaban ---------------- */
@@ -277,6 +301,9 @@
 
         Array.from(els.answers.children).forEach((el) => {
             el.disabled = true;
+            // Bersihkan animasi masuk agar animasi shake/verdict tidak tertunda.
+            el.classList.remove('fx-answer-in');
+            el.style.animationDelay = '';
             const key = el.dataset.key;
 
             if (key === correctKey) {
@@ -299,9 +326,31 @@
 
         const isCorrect = Boolean(data.is_correct);
         const timedOut = Boolean(data.timed_out);
+        const chosenBtn = chosenKey
+            ? els.answers.querySelector('.answer[data-key="' + chosenKey + '"]')
+            : null;
 
         if (isCorrect) sfx.correct();
         else sfx.wrong();
+
+        // Efek piksel + kilat layar mengikuti jawaban.
+        if (isCorrect) {
+            state.streak += 1;
+            if (chosenBtn && window.pixelBurst) {
+                const rect = chosenBtn.getBoundingClientRect();
+                window.pixelBurst(
+                    rect.left + rect.width / 2,
+                    rect.top + rect.height / 2,
+                    ['#00fa64', '#00f0ff', '#dbfcff'],
+                    18
+                );
+            }
+            if (window.fxFlash) window.fxFlash('rgba(0, 250, 100, .14)');
+        } else {
+            state.streak = 0;
+            if (window.fxFlash) window.fxFlash('rgba(255, 74, 141, .12)');
+        }
+        updateStreak();
 
         els.feedback.hidden = false;
         els.feedback.className = 'feedback ' + (isCorrect ? 'ok' : 'bad');
@@ -313,6 +362,9 @@
                         ? '<span aria-hidden="true">⏰</span> Waktu habis!'
                         : '<span aria-hidden="true">😖</span> Salah!') +
             '</div>' +
+            (isCorrect && state.streak >= 3
+                ? '<p class="streak-note">🔥 Streak ' + state.streak + '× — pertahankan!</p>'
+                : '') +
             (data.explanation ? '<p>' + window.esc(data.explanation) + '</p>' : '') +
             '<p class="keyline">Jawaban benar: <b>' + window.esc(correctKey) + '</b>' +
                 (chosenKey && !isCorrect ? ' — jawabanmu: ' + window.esc(chosenKey) : '') + '</p>' +
@@ -392,21 +444,42 @@
         const steps = ['3', '2', '1', 'GO!'];
         let step = 0;
         els.countdown.hidden = false;
+        els.countdown.classList.add('is-active');
+        els.countdown.classList.remove('is-go');
 
         const show = () => {
             if (step >= steps.length) {
                 els.countdown.hidden = true;
+                els.countdown.classList.remove('is-active', 'is-go');
                 onDone();
                 return;
             }
 
             els.countdownNum.textContent = steps[step];
+            els.countdown.classList.toggle('is-go', steps[step] === 'GO!');
             els.countdownNum.style.animation = 'none';
             void els.countdownNum.offsetWidth;
             els.countdownNum.style.animation = '';
 
-            if (steps[step] === 'GO!') sfx.go();
-            else sfx.tick();
+            if (steps[step] === 'GO!') {
+                sfx.go();
+                if (window.fxFlash) window.fxFlash('rgba(0, 240, 255, .2)');
+            } else {
+                sfx.tick();
+            }
+
+            // Ledakan piksel di sekitar angka hitung mundur.
+            if (window.pixelBurst) {
+                const rect = els.countdownNum.getBoundingClientRect();
+                window.pixelBurst(
+                    rect.left + rect.width / 2,
+                    rect.top + rect.height / 2,
+                    steps[step] === 'GO!'
+                        ? ['#00f0ff', '#00fa64', '#dbfcff']
+                        : ['#00f0ff', '#ff4a8d', '#ffcb45'],
+                    steps[step] === 'GO!' ? 30 : 10
+                );
+            }
 
             step++;
             setTimeout(show, steps[step - 1] === 'GO!' ? 520 : 760);

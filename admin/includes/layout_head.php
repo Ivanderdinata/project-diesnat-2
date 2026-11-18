@@ -43,7 +43,7 @@ $navItems = [
         </a>
         <nav class="site-nav" aria-label="Navigasi admin">
             <span class="nav-link" style="cursor:default">👤 <?= e((string) ($_SESSION['admin_username'] ?? '')) ?></span>
-            <a class="nav-link" href="<?= e(APP_URL) ?>/index.php" target="_blank" rel="noopener">Lihat Situs</a>
+            <a class="nav-link" href="<?= e(APP_URL) ?>/index.php?skip=1" target="_blank" rel="noopener">Lihat Situs</a>
             <a class="nav-link nav-link-accent" href="<?= e(APP_URL) ?>/admin/logout.php"
                onclick="return confirm('Keluar dari panel admin?')">Logout</a>
         </nav>
@@ -68,7 +68,7 @@ $navItems = [
                 </a>
             <?php endforeach; ?>
             <div class="sep"></div>
-            <a href="<?= e(APP_URL) ?>/index.php" target="_blank" rel="noopener">
+            <a href="<?= e(APP_URL) ?>/index.php?skip=1" target="_blank" rel="noopener">
                 <span aria-hidden="true">🌐</span> Buka Website
             </a>
         </nav>

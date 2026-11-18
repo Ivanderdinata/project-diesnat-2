@@ -1,0 +1,447 @@
+/* ============================================================
+   Hall of Fame — halaman leaderboard khusus
+   ============================================================ */
+
+.page-leaderboard .site-main {
+    max-width: 980px;
+}
+
+/* ---------- Hero ---------- */
+.lb-hero {
+    position: relative;
+    margin-bottom: 26px;
+    padding: clamp(22px, 4vw, 38px);
+    text-align: center;
+    background:
+        radial-gradient(520px 240px at 50% -20%, rgba(255, 203, 69, .16), transparent 70%),
+        var(--surface);
+    border: 2px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--gold);
+    overflow: hidden;
+}
+
+.lb-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: .1;
+    background-image: radial-gradient(var(--gold) 1px, transparent 1px);
+    background-size: 18px 18px;
+    pointer-events: none;
+}
+
+.lb-hero > * {
+    position: relative;
+    z-index: 1;
+}
+
+.lb-eyebrow {
+    display: inline-block;
+    padding: 4px 12px;
+    margin-bottom: 14px;
+    font-family: var(--font-display);
+    font-size: .6rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--bg-deep);
+    background: var(--gold);
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow-sm);
+}
+
+.lb-title {
+    margin: 0 0 .25em;
+    font-size: clamp(1.6rem, 5vw, 2.6rem);
+    color: var(--cyan-soft);
+    text-shadow: 0 0 18px rgba(0, 240, 255, .55);
+}
+
+.lb-title .hl {
+    color: var(--gold);
+    text-shadow: 0 0 18px rgba(255, 203, 69, .7);
+}
+
+.lb-sub {
+    max-width: 52ch;
+    margin: 0 auto 22px;
+    font-size: .82rem;
+    color: var(--text-muted);
+}
+
+/* ---------- Statistik ---------- */
+.lb-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+}
+
+.lb-stat {
+    padding: 10px 8px;
+    background: var(--bg-deep);
+    border: 2px solid var(--ink);
+    box-shadow: inset 2px 2px 0 var(--ink);
+}
+
+.lb-stat b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.2;
+    color: var(--green);
+    font-variant-numeric: tabular-nums;
+}
+
+.lb-stat span {
+    font-size: .54rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+}
+
+/* ---------- Podium ---------- */
+.lb-podium {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    align-items: end;
+    margin-bottom: 22px;
+}
+
+.lb-podium-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 30px 12px 16px;
+    text-align: center;
+    background: var(--surface);
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow);
+    transition: transform .2s var(--ease);
+}
+
+.lb-podium-card:hover {
+    transform: translateY(-4px);
+}
+
+.lb-podium-tag {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 2px 10px;
+    font-size: .56rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--bg-deep);
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow-sm);
+}
+
+.lb-podium-avatar {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 2px;
+    font-size: 1.3rem;
+    background: var(--bg-deep);
+    border: 2px solid var(--ink);
+}
+
+.lb-podium-name {
+    font-family: var(--font-display);
+    font-size: .84rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text);
+    overflow-wrap: anywhere;
+}
+
+.lb-podium-kelas {
+    font-size: .58rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+}
+
+.lb-podium-score {
+    width: 100%;
+    margin-top: 6px;
+    padding: 4px 8px;
+    font-family: var(--font-display);
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--green);
+    background: var(--bg-deep);
+    border: 2px solid var(--ink);
+}
+
+.lb-podium-time {
+    font-size: .6rem;
+    letter-spacing: .08em;
+    color: var(--text-dim);
+}
+
+.lb-podium-1 {
+    order: 2;
+    border-top: 4px solid var(--gold);
+    box-shadow: 6px 6px 0 var(--cyan);
+    padding-bottom: 22px;
+}
+
+.lb-podium-1 .lb-podium-tag { background: var(--gold); }
+.lb-podium-1 .lb-podium-avatar { width: 58px; height: 58px; font-size: 1.6rem; color: var(--gold); }
+.lb-podium-1 .lb-podium-name { font-size: .98rem; color: var(--gold); }
+.lb-podium-1 .lb-podium-score { font-size: .95rem; }
+
+.lb-podium-2 {
+    order: 1;
+    border-top: 4px solid var(--text-muted);
+}
+
+.lb-podium-2 .lb-podium-tag { background: var(--text-muted); }
+
+.lb-podium-3 {
+    order: 3;
+    border-top: 4px solid var(--pink);
+}
+
+.lb-podium-3 .lb-podium-tag { background: var(--pink); }
+
+/* ---------- Tabel ---------- */
+.lb-table-wrap {
+    overflow-x: auto;
+}
+
+.lb-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .8rem;
+}
+
+.lb-table thead th {
+    padding: 10px 14px;
+    font-size: .58rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--text-dim);
+    background: var(--surface);
+    border-bottom: 2px solid var(--surface-3);
+    white-space: nowrap;
+}
+
+.lb-table td {
+    padding: 10px 14px;
+    border-top: 2px solid var(--surface);
+    vertical-align: middle;
+}
+
+.lb-table tbody tr {
+    transition: background .15s;
+}
+
+.lb-table tbody tr:hover {
+    background: var(--surface-2);
+}
+
+.lb-table .col-rank { width: 62px; }
+.lb-table .col-score,
+.lb-table .col-time { text-align: right; }
+.lb-table th.col-score,
+.lb-table th.col-time { text-align: right; }
+
+.lb-rank {
+    display: inline-grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    font-family: var(--font-display);
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: var(--surface-2);
+    border: 2px solid var(--ink);
+}
+
+.lb-table tr.rank-1 { background: rgba(255, 203, 69, .08); }
+.lb-table tr.rank-2 { background: rgba(185, 202, 203, .05); }
+.lb-table tr.rank-3 { background: rgba(255, 177, 196, .05); }
+
+.lb-table tr.rank-1 .lb-rank { color: var(--bg-deep); background: var(--gold); }
+.lb-table tr.rank-2 .lb-rank { color: var(--bg-deep); background: var(--text-muted); }
+.lb-table tr.rank-3 .lb-rank { color: var(--bg-deep); background: var(--pink-soft); }
+
+.lb-player {
+    font-weight: 700;
+    color: var(--text);
+    overflow-wrap: anywhere;
+}
+
+.lb-kelas {
+    font-size: .68rem;
+    letter-spacing: .06em;
+    color: var(--text-dim);
+}
+
+.lb-time {
+    font-size: .74rem;
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+}
+
+.lb-score {
+    font-family: var(--font-display);
+    font-size: .92rem;
+    font-weight: 700;
+    text-align: right;
+    color: var(--green);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* ---------- Kosong ---------- */
+.lb-empty {
+    padding: 48px 24px;
+    text-align: center;
+}
+
+.lb-empty-emoji {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 2.6rem;
+}
+
+.lb-empty h2 {
+    font-size: 1rem;
+    color: var(--cyan-soft);
+}
+
+.lb-empty p {
+    margin-bottom: 20px;
+    color: var(--text-muted);
+    font-size: .82rem;
+}
+
+/* ---------- Aksi ---------- */
+.lb-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+/* ---------- Animasi ---------- */
+@keyframes lbRowIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.lb-table tbody tr {
+    animation: lbRowIn .4s var(--ease) backwards;
+}
+
+.lb-table tbody tr:nth-child(1) { animation-delay: .04s; }
+.lb-table tbody tr:nth-child(2) { animation-delay: .08s; }
+.lb-table tbody tr:nth-child(3) { animation-delay: .12s; }
+.lb-table tbody tr:nth-child(4) { animation-delay: .16s; }
+.lb-table tbody tr:nth-child(5) { animation-delay: .2s; }
+.lb-table tbody tr:nth-child(6) { animation-delay: .24s; }
+.lb-table tbody tr:nth-child(7) { animation-delay: .28s; }
+.lb-table tbody tr:nth-child(8) { animation-delay: .32s; }
+.lb-table tbody tr:nth-child(9) { animation-delay: .36s; }
+.lb-table tbody tr:nth-child(10) { animation-delay: .4s; }
+
+@keyframes lbPodiumIn {
+    from { opacity: 0; transform: translateY(16px) scale(.96); }
+    to   { opacity: 1; transform: none; }
+}
+
+.lb-podium-card {
+    animation: lbPodiumIn .5s var(--ease) backwards;
+}
+
+.lb-podium-1 { animation-delay: .16s; }
+.lb-podium-2 { animation-delay: .06s; }
+.lb-podium-3 { animation-delay: .26s; }
+
+/* ---------- Penanda "KAMU" ---------- */
+.lb-table tbody tr.lb-is-you {
+    background: rgba(0, 240, 255, .1);
+    box-shadow: inset 3px 0 0 var(--cyan);
+}
+
+.lb-you-tag {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 6px;
+    font-family: var(--font-display);
+    font-size: .5rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    vertical-align: middle;
+    color: var(--bg-deep);
+    background: var(--cyan);
+    border: 2px solid var(--ink);
+}
+
+/* ---------- Tombol aksi di section head beranda ---------- */
+.section-head-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ---------- Responsif ---------- */
+@media (max-width: 700px) {
+    .lb-podium {
+        grid-template-columns: 1fr;
+    }
+
+    .lb-podium-1,
+    .lb-podium-2,
+    .lb-podium-3 {
+        order: 0;
+    }
+
+    .lb-table .col-kelas,
+    .lb-table .col-time {
+        display: none;
+    }
+
+    .lb-table td,
+    .lb-table thead th {
+        padding: 8px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .lb-stat b {
+        font-size: 1rem;
+    }
+}
+
+/* ---------- Gerak minimal ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .lb-table tbody tr,
+    .lb-podium-card {
+        animation: none;
+    }
+}
+
+/* ---------- Cetak ---------- */
+@media print {
+    .lb-actions,
+    .lb-hero::before {
+        display: none;
+    }
+}

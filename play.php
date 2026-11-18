@@ -54,18 +54,28 @@ require APP_ROOT . '/includes/header.php';
      data-player="<?= e((string) $session['name']) ?>"
      data-kelas="<?= e((string) $session['kelas']) ?>">
 
+    <div class="px-quiz-scene" aria-hidden="true">
+        <div class="px-quiz-rocket"><?= pixel_gif_rocket() ?></div>
+        <div class="px-quiz-astro"><?= pixel_gif_astro() ?></div>
+    </div>
+
     <div class="play-topline">
         <div class="play-meta">
             <span class="meta-chip">👤 <b><?= e((string) $session['name']) ?></b></span>
             <span class="meta-chip">🏫 <?= e((string) $session['kelas']) ?></span>
             <span class="meta-chip score">⭐ <b id="score-value"><?= number_format((int) $session['total_score'], 0, ',', '.') ?></b></span>
+            <span class="meta-chip streak" id="streak-chip" hidden aria-live="polite">🔥 <b id="streak-value">0</b>×</span>
         </div>
         <div style="display:flex;gap:8px;align-items:center">
             <button type="button" class="icon-btn" id="mute-btn" aria-pressed="false"
                     title="Nyalakan/matikan suara" aria-label="Nyalakan atau matikan suara">
                 <span id="mute-icon" aria-hidden="true">🔊</span>
             </button>
-            <a class="icon-btn" href="<?= e(APP_URL) ?>/index.php"
+            <a class="icon-btn" href="<?= e(APP_URL) ?>/cafeteria.php"
+               title="Kembali ke Cafeteria" aria-label="Kembali ke Cafeteria">
+                <span aria-hidden="true">🗺️</span>
+            </a>
+            <a class="icon-btn" href="<?= e(APP_URL) ?>/index.php?skip=1"
                title="Keluar ke beranda" aria-label="Keluar ke beranda">
                 <span aria-hidden="true">✕</span>
             </a>
@@ -112,8 +122,14 @@ require APP_ROOT . '/includes/header.php';
     </div>
 </div>
 
-<div class="countdown" id="countdown" hidden aria-live="assertive">
-    <span class="countdown-num" id="countdown-num">3</span>
+<div class="countdown" id="countdown" hidden>
+    <?php pixel_countdown_scene(); ?>
+    <div class="countdown-rocket" aria-hidden="true"><?= pixel_gif_rocket() ?></div>
+    <div class="countdown-body">
+        <p class="countdown-label" aria-hidden="true">Get Ready</p>
+        <span class="countdown-num" id="countdown-num" aria-live="assertive">3</span>
+        <p class="countdown-sub" aria-hidden="true">Jawab cepat &amp; tepat!</p>
+    </div>
 </div>
 
 <noscript>
